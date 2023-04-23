@@ -26,10 +26,26 @@ To create an order for a customer:
 curl -X POST -H "Content-Type: application/json" --json '{"productCodeQuantityMap" : {"FRUIT_APPLE" : 3, "FRUIT_ORANGE" : 4}}' http://localhost:8080/customers/1/orders
 
 ### Prices endpoint
-To list all prices: curl http://localhost:8080/prices
+To list all prices: 
+curl http://localhost:8080/prices
 
 ### Orders endpoint
-To list all orders: curl http://localhost:8080/orders
+To list all orders: 
+curl http://localhost:8080/orders
+
+### Products endpoint
+To list all products:
+curl http://localhost:8080/products
+
+### Offers endpoint
+To list all offers:
+curl http://localhost:8080/offers
+
+To create a BOGOF offer on Apples:
+curl -X POST -H "Content-Type: application/json" --json '{"code":"BOGOF", "product":{"id": 1}}' http://localhost:8080/offers
+
+To create a THREE4TWO offer on Oranges:
+curl -X POST -H "Content-Type: application/json" --json '{"code":"THREE4TWO", "product":{"id": 2}}' http://localhost:8080/offers
 
 ## H2
 Console at http://localhost:8080/h2-console 

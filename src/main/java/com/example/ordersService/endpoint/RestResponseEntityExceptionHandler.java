@@ -2,6 +2,7 @@ package com.example.ordersService.endpoint;
 
 import com.example.ordersService.exception.CustomerNotFoundException;
 import com.example.ordersService.exception.PriceNotFoundException;
+import com.example.ordersService.exception.ProductNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = { PriceNotFoundException.class })
     protected ResponseEntity<Object> handlePriceNotFoundException(PriceNotFoundException ex, WebRequest request) {
         return handleExceptionInternal(ex, "Currently unable to calculate the cost of your order.", new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(value = { ProductNotFoundException.class })
+    protected ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = { IllegalArgumentException.class })
