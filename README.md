@@ -25,6 +25,12 @@ curl http://localhost:8080/customers/1/orders
 To create an order for a customer: 
 curl -X POST -H "Content-Type: application/json" --json '{"productCodeQuantityMap" : {"FRUIT_APPLE" : 3, "FRUIT_ORANGE" : 4}}' http://localhost:8080/customers/1/orders
 
+Expected response when no offer:
+{"id":1,"customerId":1,"productCodeQuantityMap":{"FRUIT_APPLE":3,"FRUIT_ORANGE":4},"priceInCents":280.0}
+
+Expected response when offers (BOGOF on Apples, THREE4TWO on Oranges):
+{"id":2,"customerId":1,"productCodeQuantityMap":{"FRUIT_APPLE":3,"FRUIT_ORANGE":4},"priceInCents":195.0}
+
 ### Prices endpoint
 To list all prices: 
 curl http://localhost:8080/prices
@@ -58,5 +64,6 @@ With prod credentials, you would use environment variables.
 - Unit tests:
   - OrderEndpointTest to write fully. Replicate approach for other endpoints
   - CustomerServiceTest to write fully. Replicate for classes OrderService & PriceService
-- Constraints on OrderDto
+  - Coverage on PriceEngineService
+- Improve/add constraints on all DTOs so we bounce off invalid data at the earliest opportunity.
 - Add Spring HATEOAS

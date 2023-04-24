@@ -1,6 +1,5 @@
 package com.example.ordersService.service;
 
-import com.example.ordersService.domain.Customer;
 import com.example.ordersService.domain.Product;
 import com.example.ordersService.repository.ProductRepository;
 import org.springframework.stereotype.Service;
