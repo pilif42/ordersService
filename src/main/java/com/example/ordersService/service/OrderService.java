@@ -6,6 +6,7 @@ import com.example.ordersService.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -19,6 +20,10 @@ public class OrderService {
 
     public List<Order> findAll() {
         return orderRepository.findAll();
+    }
+
+    public Optional<Order> findById(Integer orderId) {
+        return orderRepository.findById(orderId);
     }
 
     public List<Order> findAllByCustomerId(Integer customerId) {

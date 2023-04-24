@@ -39,6 +39,9 @@ curl http://localhost:8080/prices
 To list all orders: 
 curl http://localhost:8080/orders
 
+To retrieve a specific order:
+curl http://localhost:8080/orders/1
+
 ### Products endpoint
 To list all products:
 curl http://localhost:8080/products
@@ -52,6 +55,23 @@ curl -X POST -H "Content-Type: application/json" --json '{"code":"BOGOF", "produ
 
 To create a THREE4TWO offer on Oranges:
 curl -X POST -H "Content-Type: application/json" --json '{"code":"THREE4TWO", "product":{"id": 2}}' http://localhost:8080/offers
+
+### To test Step 3: Store and retrieve orders
+curl -X POST -H "Content-Type: application/json" --json '{"emailAddress":"joe@gmail.com"}' http://localhost:8080/customers
+
+curl -X POST -H "Content-Type: application/json" --json '{"code":"BOGOF", "product":{"id": 1}}' http://localhost:8080/offers
+
+curl -X POST -H "Content-Type: application/json" --json '{"code":"THREE4TWO", "product":{"id": 2}}' http://localhost:8080/offers
+
+curl -X POST -H "Content-Type: application/json" --json '{"productCodeQuantityMap" : {"FRUIT_APPLE" : 3, "FRUIT_ORANGE" : 4}}' http://localhost:8080/customers/1/orders
+
+curl http://localhost:8080/orders
+
+curl http://localhost:8080/orders/1
+
+Then check the in-memory store at http://localhost:8080/h2-console with aTester / aPassword
+  - select * from ORDERS
+  - select * from ORDER_PRODUCT_MAPPING
 
 ## H2
 Console at http://localhost:8080/h2-console 

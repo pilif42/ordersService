@@ -1,6 +1,7 @@
 package com.example.ordersService.endpoint;
 
 import com.example.ordersService.exception.CustomerNotFoundException;
+import com.example.ordersService.exception.OrderNotFoundException;
 import com.example.ordersService.exception.PriceNotFoundException;
 import com.example.ordersService.exception.ProductNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(value = { ProductNotFoundException.class })
     protected ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(value = { OrderNotFoundException.class })
+    protected ResponseEntity<Object> handleOrderNotFoundException(OrderNotFoundException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
