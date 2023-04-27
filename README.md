@@ -26,10 +26,10 @@ To create an order for a customer:
 curl -X POST -H "Content-Type: application/json" --json '{"productCodeQuantityMap" : {"FRUIT_APPLE" : 3, "FRUIT_ORANGE" : 4}}' http://localhost:8080/customers/1/orders
 
 Expected response when no offer:
-{"id":1,"customerId":1,"productCodeQuantityMap":{"FRUIT_APPLE":3,"FRUIT_ORANGE":4},"priceInCents":280.0}
+{"id":1,"customerId":1,"productCodeQuantityMap":{"FRUIT_APPLE":3,"FRUIT_ORANGE":4},"priceInCents":280}
 
 Expected response when offers (BOGOF on Apples, THREE4TWO on Oranges):
-{"id":2,"customerId":1,"productCodeQuantityMap":{"FRUIT_APPLE":3,"FRUIT_ORANGE":4},"priceInCents":195.0}
+{"id":2,"customerId":1,"productCodeQuantityMap":{"FRUIT_APPLE":3,"FRUIT_ORANGE":4},"priceInCents":195}
 
 ### Prices endpoint
 To list all prices: 
@@ -81,6 +81,7 @@ Log in with aTester / aPassword defined in application.properties for this POC.
 With prod credentials, you would use environment variables.
 
 ## TODO
+- Add Postgresql with Liquibase. Try to use the JPA Buddy plugin to write changelog files from entity beans.
 - Unit tests:
   - OrderEndpointTest to write fully. Replicate approach for other endpoints
   - CustomerServiceTest to write fully. Replicate for classes OrderService & PriceService

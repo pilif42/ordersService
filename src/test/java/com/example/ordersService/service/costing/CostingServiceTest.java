@@ -1,4 +1,4 @@
-package com.example.ordersService.service;
+package com.example.ordersService.service.costing;
 
 import com.example.ordersService.domain.Offer;
 import com.example.ordersService.domain.OfferCode;
@@ -7,54 +7,60 @@ import com.example.ordersService.domain.Price;
 import com.example.ordersService.exception.PriceNotFoundException;
 import com.example.ordersService.repository.OfferRepository;
 import com.example.ordersService.repository.PriceRepository;
+import com.example.ordersService.service.costing.rule.BofgofRule;
+import com.example.ordersService.service.costing.rule.RuleEngine;
+import com.example.ordersService.service.costing.rule.Three4twoRule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-public class PriceEngineServiceTest {
-    @Mock
+public class CostingServiceTest {
     private PriceRepository priceRepository;
 
-    @Mock
     private OfferRepository offerRepository;
 
-    @InjectMocks
-    private PriceEngineService priceEngineService;
+    private CostingService costingService;
+
+    @BeforeEach
+    public void setup() {
+        priceRepository = mock(PriceRepository.class);
+        offerRepository = mock(OfferRepository.class);
+        // TODO Rather than testing rules in this class, we should create a BofgofRuleTest and a Three4twoRuleTest. Here, we should simply rely on a mock RuleEngine.
+        costingService = new CostingService(priceRepository, offerRepository, new RuleEngine(List.of(new BofgofRule(), new Three4twoRule())));
+    }
 
     @Nested
     @DisplayName("Tests for calculate when no offer is available")
     class calculateWhenNoOffer {
         @Test
         public void givenNullOrder_expectIllegalArgumentException() {
-            assertThrows(IllegalArgumentException.class, () -> priceEngineService.calculate(null));
+            assertThrows(IllegalArgumentException.class, () -> costingService.calculate(null));
         }
 
         @Test
         public void givenOrderWithNullMap_expectIllegalArgumentException() {
-            assertThrows(IllegalArgumentException.class, () -> priceEngineService.calculate(new Order()));
+            assertThrows(IllegalArgumentException.class, () -> costingService.calculate(new Order()));
         }
 
         @Test
         public void givenOrderWithEmptyMap_expectIllegalArgumentException() {
             Order order = new Order();
             order.setProductCodeQuantityMap(new HashMap<>());
-            assertThrows(IllegalArgumentException.class, () -> priceEngineService.calculate(order));
+            assertThrows(IllegalArgumentException.class, () -> costingService.calculate(order));
         }
 
         @Test
@@ -64,7 +70,7 @@ public class PriceEngineServiceTest {
             productCodeQuantityMap.put("notPricedProductCode", 3);
             order.setProductCodeQuantityMap(productCodeQuantityMap);
 
-            Exception exception = assertThrows(PriceNotFoundException.class, () -> priceEngineService.calculate(order));
+            Exception exception = assertThrows(PriceNotFoundException.class, () -> costingService.calculate(order));
             assertEquals("No unit price found for product notPricedProductCode", exception.getMessage());
         }
 
@@ -78,7 +84,7 @@ public class PriceEngineServiceTest {
             productCodeQuantityMap.put("someProductCode", 3);
             order.setProductCodeQuantityMap(productCodeQuantityMap);
 
-            Exception exception = assertThrows(RuntimeException.class, () -> priceEngineService.calculate(order));
+            Exception exception = assertThrows(RuntimeException.class, () -> costingService.calculate(order));
             assertEquals(errorMsg, exception.getMessage());
         }
 
@@ -100,7 +106,7 @@ public class PriceEngineServiceTest {
             productCodeQuantityMap.put(orangeCode, 4);
             order.setProductCodeQuantityMap(productCodeQuantityMap);
 
-            assertEquals(280d, priceEngineService.calculate(order));
+            assertEquals(280d, costingService.calculate(order));
         }
     }
 
@@ -124,7 +130,7 @@ public class PriceEngineServiceTest {
             productCodeQuantityMap.put(appleCode, quantity);
             order.setProductCodeQuantityMap(productCodeQuantityMap);
 
-            assertEquals(orderCost, priceEngineService.calculate(order));
+            assertEquals(orderCost, costingService.calculate(order));
         }
     }
 
@@ -148,7 +154,7 @@ public class PriceEngineServiceTest {
             productCodeQuantityMap.put(orangeCode, quantity);
             order.setProductCodeQuantityMap(productCodeQuantityMap);
 
-            assertEquals(orderCost, priceEngineService.calculate(order));
+            assertEquals(orderCost, costingService.calculate(order));
         }
     }
 }

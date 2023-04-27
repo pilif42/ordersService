@@ -35,5 +35,5 @@ public class Order {
     @Column(name = "quantity")
     private Map<String, Integer> productCodeQuantityMap;
 
-    private Double priceInCents;
+    private Integer priceInCents;
 }

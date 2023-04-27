@@ -9,5 +9,5 @@ public class OrderDto {
     private Integer id;
     private Integer customerId;
     private Map<String, Integer> productCodeQuantityMap;
-    private Double priceInCents;
+    private Integer priceInCents;
 }

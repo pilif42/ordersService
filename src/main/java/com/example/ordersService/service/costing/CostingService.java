@@ -1,12 +1,13 @@
-package com.example.ordersService.service;
+package com.example.ordersService.service.costing;
 
 import com.example.ordersService.domain.Offer;
-import com.example.ordersService.domain.OfferCode;
 import com.example.ordersService.domain.Order;
 import com.example.ordersService.domain.Price;
 import com.example.ordersService.exception.PriceNotFoundException;
 import com.example.ordersService.repository.OfferRepository;
 import com.example.ordersService.repository.PriceRepository;
+import com.example.ordersService.service.costing.rule.Expression;
+import com.example.ordersService.service.costing.rule.RuleEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +19,20 @@ import static java.lang.String.format;
 
 @Slf4j
 @Service
-public class PriceEngineService {
+public class CostingService {
     private final PriceRepository priceRepository;
     private final OfferRepository offerRepository;
+    private final RuleEngine ruleEngine;
 
-    public PriceEngineService(PriceRepository priceRepository, OfferRepository offerRepository) {
+    public CostingService(PriceRepository priceRepository, OfferRepository offerRepository, RuleEngine ruleEngine) {
         this.priceRepository = priceRepository;
         this.offerRepository = offerRepository;
+        this.ruleEngine = ruleEngine;
     }
 
-    public Double calculate(Order order) throws PriceNotFoundException {
+    public int calculate(Order order) throws PriceNotFoundException {
         if (isValid(order)) {
-            double result = 0d;
+            int result = 0;
 
             Map<String, Integer> productCodeQuantityMap = order.getProductCodeQuantityMap();
             Set<String> productCodes = productCodeQuantityMap.keySet();
@@ -43,28 +46,11 @@ public class PriceEngineService {
                     if (offerOpt.isEmpty()) {
                         result = result + unitPrice * quantity;
                     } else {
-                        Offer offer = offerOpt.get();
-                        OfferCode offerCode = offer.getCode();
-                        switch (offerCode) {
-                            case BOGOF -> {
-                                int modulus = quantity % 2;
-                                if (modulus == 0) {
-                                    result = result + unitPrice * (quantity / 2);
-                                } else {
-                                    int integerPart = quantity / 2;
-                                    result = result + (integerPart + modulus) * unitPrice;
-                                }
-                            }
-                            case THREE4TWO -> {
-                                int modulus = quantity % 3;
-                                if (modulus == 0) {
-                                    result = result + unitPrice * ((quantity * 2) / 3);
-                                } else {
-                                    int integerPart = quantity / 3;
-                                    result = result + ((integerPart * 2) + modulus) * unitPrice;
-                                }
-                            }
-                        }
+                        Expression expression = new Expression();
+                        expression.setOfferCode(offerOpt.get().getCode());
+                        expression.setQuantity(quantity);
+                        expression.setUnitPrice(unitPrice);
+                        result = result + ruleEngine.process(expression);
                     }
                 } else {
                     String errorMsg = format("No unit price found for product %s", productCode);
