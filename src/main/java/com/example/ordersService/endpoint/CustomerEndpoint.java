@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 
 @Slf4j
 @RestController
+@RequestMapping("customers")
 public class CustomerEndpoint {
     private static final String CUSTOMER_NOT_FOUND_MSG = "Customer with id %d does not exist.";
 
@@ -41,13 +43,13 @@ public class CustomerEndpoint {
         this.orderMapper = orderMapper;
     }
 
-    @GetMapping("/customers")
+    @GetMapping
     public List<CustomerDto> findAll() {
         log.info("Entering findAll");
         return customerMapper.map(customerService.findAll());
     }
 
-    @GetMapping("/customers/{customerId}")
+    @GetMapping("/{customerId}")
     public CustomerDto findOne(@PathVariable("customerId") Integer customerId) throws CustomerNotFoundException {
         log.info("Entering findOne");
         Optional<Customer> custOpt = customerService.findById(customerId);
@@ -60,19 +62,19 @@ public class CustomerEndpoint {
         }
     }
 
-    @PostMapping("/customers")
+    @PostMapping
     public CustomerDto create(@RequestBody @Valid CustomerDto customerDto) {
         log.info("Entering create");
         return customerMapper.customerToCustomerDto(customerService.create(customerMapper.customerDtoToCustomer(customerDto)));
     }
 
-    @GetMapping(value = "/customers/{customerId}/orders")
+    @GetMapping(value = "/{customerId}/orders")
     public List<OrderDto> findOrders(@PathVariable("customerId") Integer customerId) {
         log.info("Entering findOrders");
         return orderMapper.map(orderService.findAllByCustomerId(customerId));
     }
 
-    @PostMapping(value = "/customers/{customerId}/orders")
+    @PostMapping(value = "/{customerId}/orders")
     public OrderDto createOrder(@PathVariable("customerId") Integer customerId,
                                 @RequestBody OrderDto orderDto) throws CustomerNotFoundException, PriceNotFoundException {
         log.info("Entering createOrder");

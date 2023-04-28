@@ -50,6 +50,9 @@ curl http://localhost:8080/orders/1
 To list all products:
 curl http://localhost:8080/products
 
+To list a specific product:
+curl http://localhost:8080/products/1
+
 ### Offers endpoint
 To list all offers:
 curl http://localhost:8080/offers

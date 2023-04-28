@@ -8,6 +8,7 @@ import com.example.ordersService.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import static java.lang.String.format;
 
 @Slf4j
 @RestController
+@RequestMapping("orders")
 public class OrderEndpoint {
     private static final String ORDER_NOT_FOUND_MSG = "Order with id %d does not exist.";
 
@@ -28,13 +30,13 @@ public class OrderEndpoint {
         this.orderMapper = orderMapper;
     }
 
-    @GetMapping("/orders")
+    @GetMapping
     public List<OrderDto> findAll() {
         log.info("Entering findAll");
         return orderMapper.map(orderService.findAll());
     }
 
-    @GetMapping(value = "/orders/{orderId}")
+    @GetMapping(value = "/{orderId}")
     public OrderDto findOrder(@PathVariable("orderId") Integer orderId) throws OrderNotFoundException {
         log.info("Entering findOrder");
         Optional<Order> orderOpt = orderService.findById(orderId);
