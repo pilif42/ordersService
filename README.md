@@ -9,6 +9,10 @@ mvn clean spring-boot:run
 
 ## To test
 
+### Greeting endpoint
+curl http://localhost:8080/greeting
+curl http://localhost:8080/greeting?name=Joe
+
 ### Customers endpoint
 To list all customers:
 curl http://localhost:8080/customers
@@ -81,10 +85,11 @@ Log in with aTester / aPassword defined in application.properties for this POC.
 With prod credentials, you would use environment variables.
 
 ## TODO
+- Add Spring HATEOAS on products, prices, etc.
+- Add a React front-end
 - Add Postgresql with Liquibase. Try to use the JPA Buddy plugin to write changelog files from entity beans.
 - Unit tests:
   - OrderEndpointTest to write fully. Replicate approach for other endpoints
   - CustomerServiceTest to write fully. Replicate for classes OrderService & PriceService
   - Coverage on PriceEngineService
 - Improve/add constraints on all DTOs so we bounce off invalid data at the earliest opportunity.
-- Add Spring HATEOAS
