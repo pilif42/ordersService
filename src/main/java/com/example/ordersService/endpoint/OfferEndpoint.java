@@ -78,14 +78,17 @@ public class OfferEndpoint {
     }
 
     @PostMapping
-    public OfferDto create(@RequestBody @Valid OfferDto offerDto) throws ProductNotFoundException {
+    public EntityModel<OfferDto> create(@RequestBody @Valid OfferDto offerDto) throws OfferNotFoundException, ProductNotFoundException {
         log.info("Entering create");
         Integer productId = offerDto.getProduct().getId();
         Optional<Product> productOpt = productService.findById(productId);
         if (productOpt.isPresent()) {
             Offer offer = offerMapper.offerDtoToOffer(offerDto);
             offer.setProduct(productOpt.get());
-            return offerMapper.offerToOfferDto(offerService.create(offer));
+            offer = offerService.create(offer);
+            return EntityModel.of(offerMapper.offerToOfferDto(offer),
+                    linkTo(methodOn(OfferEndpoint.class).findOne(offer.getId())).withSelfRel(),
+                    linkTo(methodOn(OfferEndpoint.class).findAll()).withRel("offers"));
         } else {
             final String errorMsg = String.format("No product found with id %d", productId);
             log.error(errorMsg);
