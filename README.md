@@ -88,8 +88,12 @@ Log in with aTester / aPassword defined in application.properties for this POC.
 With prod credentials, you would use environment variables.
 
 ## TODO
-- Add Spring HATEOAS on products, prices, etc.
-- Add a React front-end
+- Add Spring HATEOAS using https://docs.spring.io/spring-hateoas/docs/current/reference/html/ :
+  - ProductEndpoint then OfferEndpoint
+  - Add a link to a method to update a product or an offer
+- Add a React front-end:
+  - screen to show products, then offers
+- Finish off the HATEOAS on all endpoints
 - Add Postgresql with Liquibase. Try to use the JPA Buddy plugin to write changelog files from entity beans.
 - Unit tests:
   - OrderEndpointTest to write fully. Replicate approach for other endpoints
