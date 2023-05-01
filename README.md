@@ -90,9 +90,10 @@ Log in with aTester / aPassword defined in application.properties for this POC.
 
 With prod credentials, you would use environment variables.
 
+## Documents used
+For Spring HATEOAS: https://docs.spring.io/spring-hateoas/docs/current/reference/html/
+
 ## TODO
-- Add Spring HATEOAS using https://docs.spring.io/spring-hateoas/docs/current/reference/html/ :
-  - OfferEndpoint: what is the best way to add a link for product when listing offers?
 - Add a React front-end:
   - screen to show products, then offers
 - Finish off the HATEOAS on all endpoints

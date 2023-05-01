@@ -26,6 +26,10 @@ import static java.lang.String.format;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * So that we do not pollute OfferEndpoint with ProductEndpoint, we do not create links to Products in here. Instead,
+ * we have registered ProductProcessor in HateoasConfig.
+ */
 @Slf4j
 @RestController
 @RequestMapping("offers")
