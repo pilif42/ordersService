@@ -5,6 +5,7 @@ import com.example.ordersService.repository.OfferRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OfferService {
@@ -16,6 +17,10 @@ public class OfferService {
 
     public List<Offer> findAll() {
         return offerRepository.findAll();
+    }
+
+    public Optional<Offer> findById(Integer offerId) {
+        return offerRepository.findById(offerId);
     }
 
     public Offer create(Offer offer) {

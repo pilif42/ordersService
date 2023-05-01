@@ -54,6 +54,9 @@ To list a specific product:
 curl http://localhost:8080/products/1
 
 ### Offers endpoint
+To list a specific offer
+curl http://localhost:8080/offers/1
+
 To list all offers:
 curl http://localhost:8080/offers
 
@@ -89,8 +92,7 @@ With prod credentials, you would use environment variables.
 
 ## TODO
 - Add Spring HATEOAS using https://docs.spring.io/spring-hateoas/docs/current/reference/html/ :
-  - ProductEndpoint then OfferEndpoint
-  - Add a link to a method to update a product or an offer
+  - OfferEndpoint: what is the best way to add a link for product when listing offers?
 - Add a React front-end:
   - screen to show products, then offers
 - Finish off the HATEOAS on all endpoints
